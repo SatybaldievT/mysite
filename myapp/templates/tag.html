@@ -1,0 +1,3 @@
+{% for tag in tags %}
+    <a class="d-inline-block" href="{% url 'tag' tag.slug %}">{{ tag.name }}</a>
+{% endfor %}

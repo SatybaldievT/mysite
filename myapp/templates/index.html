@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ block_name }}</h1>
+    <ul id="questions-list" class="list-group">
+        {% for question in questions %}
+            <li class="list-group-item">
+                <div class="question row">
+                    <div class="question-avatar col-md-2">
+                        <img src='/static/img/images.png'  alt="Аватарка автора" class="img-responsive">
+                    </div>
+                    <div class="question-info col-md-8">
+                        <h2><a href="/question/{{question.id }}">{{ question.title }}</a></h2>
+                        <p>{{ question.text|truncatewords:30 }}</p>
+                        <div class="question-tags">
+                            {% for tag in question.tags.all %}
+                                <a href="{{ tag.get_absolute_url }}" class="label label-default">{{ tag.name }}</a>
+                            {% endfor %}
+                        </div>
+                        <div class="question-stats">
+                            <span>{{ question.ratings }} ответов</span>
+                            <span>{{ question.views }} просмотров</span>
+                        </div>
+                    </div>
+                    <div class="question-votes col-md-2 text-center">
+                        <button class="btn btn-default">👍</button>
+                        <span>{{ question.rating }}</span>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+   {% include 'include/paginator.html'%}
+
+{% endblock %}

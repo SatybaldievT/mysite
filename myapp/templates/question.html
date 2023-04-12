@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="question">
+        <h1>{{ question.title }}</h1>
+        <p>{{ question.description }}</p>
+        <div class="question-tags">
+            {% for tag in question.tags %}
+                <a href="{{ tag.get_absolute_url }}" class="label label-default">{{ tag.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <h2>Ответы</h2>
+    <form method="post">
+        {% csrf_token %}
+        <ul id="answers-list" class="list-group">
+            {% for answer in answers %}
+                <li class="list-group-item">
+                    <div class="answer row">
+                        <div class="answer-avatar col-md-2">
+                            <img src="{{ answer.author.avatar.url }}" alt="Аватарка автора" class="img-responsive">
+                        </div>
+                        <div class="answer-info col-md-8">
+                            <p>{{ answer.text }}</p>
+                        </div>
+                        <div class="answer-votes col-md-1 text-center">
+                            <button class="btn btn-default upvote" data-answer-id="{{ answer.id }}">👍</button>
+                            <span id="votes-{{ answer.id }}">{{ answer.ratings }}</span>
+                        </div>
+                        <div class="answer-checkbox col-md-1 text-center">
+                            <input type="checkbox" name="selected_answers" value="{{ answer.id }}">
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </form>
+
+    {% include 'include/paginator.html' %}
+
+    <h2>Добавить ответ</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="answer-text">Текст ответа:</label>
+            <textarea name="answer_text" id="answer-text" class="form-control" rows="3" required></textarea>
+        </div>
+        <input type="submit" value="Отправить" class="btn btn-primary">
+    </form>
+
+    <script>
+        // Функция для отправки AJAX-запроса на сервер при нажатии на кнопку "UPVOTE" или "DOWNVOTE"
+        function voteAnswer(answerId, voteType) {
+            $.ajax({
+                url:  '/'+voteType,
+                method: 'POST',
+                data: {
+                    'answer_id': answerId,
+                    'vote_type': voteType,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(data) {
+                    // Обновляем количество голосов на странице
+                    $('#votes-' + answerId).text(data.votes);
+                }
+            });
+        }
+
+        // Обработчик события нажатия на кнопку "UPVOTE"
+        $('.upvote').click(function() {
+            var answerId = $(this).data('answer-id');
+            voteAnswer(answerId, 'upvote');
+        });
+
+        // Обработчик события нажатия на кнопку "DOWNVOTE"
+        $('.downvote').click(function() {
+            var answerId = $(this).data('answer-id');
+            voteAnswer(answerId, 'downvote')});
+        
+    </script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1>Login</h1>
+        <form method="post" class="mt-4">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" name="password"  required>
+            </div>
+            <input type="submit" value="Submit" class="btn btn-primary">
+        </form>
+        {% if error_message %}
+            <div class="mt-4">
+                <p class="text-danger">{{ error_message }}</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

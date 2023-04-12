@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Base</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css'  %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">Логотип</a>
+                </div>
+                <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'settings' %}">Settings</a></li>
+                            <li><a href="{% url 'logout' %}">Logout</a></li>
+                            <li><a id="user-avatar">Аватарка пользователя</a></li>
+                            <li><a id="user-nickname">{{ user.username }}</a></li>
+                        {% else %}
+                            <li><a href="{% url 'login' %}">Login</a></li>
+                            <li><a href="{% url 'signup' %}">Register</a></li>
+                        {% endif %}
+                    </ul>
+                    <form class="navbar-form navbar-right">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Поиск">
+                        </div>
+                        <button type="submit" class="btn btn-default" type="submit" formaction="/ask/0">Ask</button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+        <!-- Кнопки Best и New -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="buttons">
+                        <a class="btn btn-default" href="/">New</a>
+                        <a class="btn btn-default" href="/best">Best</a>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    
+   
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9">
+                <section id="content" >
+                    {% block content %}
+                    {% endblock %}
+                </section>
+            </div>
+            <div class="col-md-3" >
+                <div class="sticky-top">
+                    <div id="right-column">
+                        <h1>Popular tag</h1>
+                        <div id = "pop"></div>
+                    </div>
+                    <div id="bottom-column">
+                        <h2>Bestmember</h2>
+                        <div id = "mem"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <footer></footer>
+
+    <!-- jQuery library -->
+    <script src="<URL>"></script>
+    <script>
+                    function loadResults() {
+                        var xhr = new XMLHttpRequest();
+                        xhr.onreadystatechange = function() {
+                            if (this.readyState == 4 && this.status == 200) {
+                                document.getElementById("pop").innerHTML = this.responseText;
+                            }
+                        };
+                        xhr.open("GET", '/hot', true);
+                        xhr.send();
+                    }
+                
+                    loadResults();
+     </script>
+     <script>
+        function updateMinHeight() {
+            var h1 = document.querySelector('#right-column h1');
+            var pop = document.querySelector('#pop');
+            pop.style.minHeight = (h1.offsetHeight * 1.2) + 'px';
+        }
+    
+        updateMinHeight();
+        window.addEventListener('resize', updateMinHeight);
+    </script>
+    <script src="<URL>"></script>
+        <script>
+                        function loadResults() {
+                            var xhr = new XMLHttpRequest();
+                            xhr.onreadystatechange = function() {
+                                if (this.readyState == 4 && this.status == 200) {
+                                    document.getElementById("mem").innerHTML = this.responseText;
+                                }
+                            };
+                            xhr.open("GET", '/mem', true);
+                            xhr.send();
+                        }
+                    
+                        loadResults();
+         </script>
+         <script>
+            function updateMinHeight() {
+                var h1 = document.querySelector('#bottom-column h1');
+                var pop = document.querySelector('#mem');
+                pop.style.minHeight = (h1.offsetHeight * 1.2) + 'px';
+            }
+        
+            updateMinHeight();
+            window.addEventListener('resize', updateMinHeight);
+        </script>
+    <!-- Latest compiled JavaScript -->
+    <script src="<URL>"></script>
+
+</body>
+</html>

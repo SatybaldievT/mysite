@@ -1,0 +1,11 @@
+
+{% block content %}
+    <ul>
+        {% for question in questions %}
+            <li style="display: inline-block;">
+                
+                <a href="{% url 'tag' question.name %}" class="label label-default">{{ question.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

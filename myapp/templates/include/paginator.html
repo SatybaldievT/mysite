@@ -1,0 +1,14 @@
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        
+      {% if paginator.has_previous %}
+        <li><a href="?page=1">&laquo;</a></li>
+        <li><a href="?page={{ paginator.previous_page_number }}">&lsaquo;</a></li>
+      {% endif %}
+      <li class="active"><a href="?page={{paginator.number}}">{{paginator.num}}</a></li>
+      {% if paginator.has_next %}
+        <li><a href="?page={{ paginator.next_page_number }}">&rsaquo;</a></li>
+        <li><a href="?page={{ paginator.num_pages }}">&raquo;</a></li>
+      {% endif %}
+    </ul>
+  </nav>
